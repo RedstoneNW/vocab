@@ -7,10 +7,8 @@ import java.awt.event.FocusListener;
 
 public class GUI {
     private static JLabel label;
-    private static Vocab currentVocab;
     private JTextField input;
     private static Vokabelliste vokabelliste;
-    private boolean askForGerman = false;
     public GUI() {
         JFrame frame = new JFrame("Vokabel Trainer");
         JPanel panel = new JPanel();
@@ -44,17 +42,7 @@ public class GUI {
         lang.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!askForGerman) {
-                    askForGerman = true;
-                    check();
-                    currentVocab.setCorrect(currentVocab.getCorrect() + 1);
-                    input.setText("");
-                } else {
-                    askForGerman = false;
-                    check();
-                    currentVocab.setCorrect(currentVocab.getCorrect() + 1);
-                    input.setText("");
-                }
+                vokabelliste.setAskForGerman();
             }
         });
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -87,9 +75,7 @@ public class GUI {
         vokabelliste.add(v1);
         vokabelliste.add(v2);
 
-        currentVocab = vokabelliste.getNext();
-
-        List<String> nextVocabList = currentVocab.getDe();
+        List<String> nextVocabList = vokabelliste.getNext();
         nextVocabList.toFirst();
         String nextVocab = "";
         while (nextVocabList.hasAccess()) {
@@ -101,33 +87,13 @@ public class GUI {
     }
 
     public void check() {
-        List<String> posAnswers = new List<String>();
-        if (!askForGerman) {
-            posAnswers = currentVocab.getEn();
+        if (vokabelliste.checkVocab(input.getText())) {
+            input.setText("Correct");
         } else {
-            posAnswers = currentVocab.getDe();
-        }
-        posAnswers.toFirst();
-        boolean correct = false;
-        while (posAnswers.hasAccess() && !correct) {
-            if (posAnswers.getContent().equals(input.getText())) {
-                correct = true;
-                currentVocab.setCorrect(currentVocab.getCorrect() + 1);
-                input.setText("Correct");
-            }
-            posAnswers.next();
-        }
-        if (!correct) {
-            currentVocab.setCorrect(currentVocab.getCorrect() - 1);
             input.setText("WRONG");
         }
-        currentVocab = vokabelliste.getNext();
         List<String> nextVocabList = new List<>();
-        if (!askForGerman) {
-            nextVocabList = vokabelliste.getNext().getDe();
-        } else {
-            nextVocabList = vokabelliste.getNext().getEn();
-        }
+        nextVocabList = vokabelliste.getNext();
         nextVocabList.toFirst();
         String nextVocab = "";
         while (nextVocabList.hasAccess()) {
