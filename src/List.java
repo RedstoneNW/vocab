@@ -1,3 +1,5 @@
+//List Class needed for other Classes. LIB:LIST
+
  /**
  * <p>
  * Materialien zu den zentralen NRW-Abiturpruefungen im Fach Informatik ab 2018
@@ -239,7 +241,7 @@ public class List<ContentType> {
    *            das anzuhaengende Objekt vom Typ ContentType
    */
   public void append(ContentType pContent) {
-    if (pContent != null) { // Nichts tun, wenn es keine Inhalt gibt.
+    if (pContent != null) { // Nichts tun, wenn es kein Inhalt gibt.
 
       if (this.isEmpty()) { // Fall: An leere Liste anfuegen.
         this.insert(pContent);
